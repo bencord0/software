@@ -19,25 +19,6 @@ def latest_lts_version():
     raise RuntimeError("Couldn't find latest lts version")
 
 
-def main():
-    version = latest_lts_version()
-    saved_tarball = Path(f'~/Software/node-{version}-linux-x64.tar.xz').expanduser()
-    if not saved_tarball.exists():
-        save_tarball(FETCH_URL.format(version=version), saved_tarball)
-
-    archive = tarfile.open(saved_tarball)
-    unpacked_root = Path(f'~/Software/node-{version}-linux-x64').expanduser()
-    root_tar_dir = f'node-{version}-linux-x64'
-
-    for member in archive:
-        save_member(archive, unpacked_root, member, root_tar_dir)
-
-    symlink = Path('~/Software/node-linux-x64').expanduser()
-    if symlink.exists():
-        symlink.unlink()
-    symlink.symlink_to(unpacked_root)
-
-
 def save_tarball(url, path):
     with path.open('wb') as tarball:
         print(f'Downloading: {url}')
@@ -52,7 +33,7 @@ def save_tarball(url, path):
 
 def save_member(archive, root, member, root_tar_dir):
     path = Path(
-        member.name.replace(root_tar_dir, str(root))
+        member.name.replace(root_tar_dir, str(root), 1)
     )
     print(f'{str(path)}')
 
@@ -79,6 +60,25 @@ def save_member(archive, root, member, root_tar_dir):
     else:
         breakpoint()
         print(member.name)
+
+
+def main():
+    version = latest_lts_version()
+    saved_tarball = Path(f'~/Software/node-{version}-linux-x64.tar.xz').expanduser()
+    if not saved_tarball.exists():
+        save_tarball(FETCH_URL.format(version=version), saved_tarball)
+
+    archive = tarfile.open(saved_tarball)
+    unpacked_root = Path(f'~/Software/node-{version}-linux-x64').expanduser()
+    root_tar_dir = f'node-{version}-linux-x64'
+
+    for member in archive:
+        save_member(archive, unpacked_root, member, root_tar_dir)
+
+    symlink = Path('~/Software/node-linux-x64').expanduser()
+    if symlink.exists():
+        symlink.unlink()
+    symlink.symlink_to(unpacked_root)
 
 
 if __name__ == '__main__':
