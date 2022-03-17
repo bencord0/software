@@ -15,8 +15,13 @@ FETCH_URL = 'https://go.dev/dl/go{version}.linux-amd64.tar.gz'
 def latest_version():
     index = requests.get(INDEX_URL).json()
 
-    latest_version = index[0]
-    return latest_version['version']
+    latest_version = index[0]['version']
+
+    # quirk for major releases
+    if latest_version.endswith('.0'):
+        latest_version = latest_version[:-2]
+
+    return latest_version
 
 
 def save_tarball(url, path):
