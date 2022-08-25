@@ -72,5 +72,7 @@ def main():
             symlink.unlink()
         symlink.symlink_to(target)
 
+    # sudo setcap cap_net_bind_service+eip $(readlink -ef $(which kubectl))
+
 if __name__ == '__main__':
     main()
