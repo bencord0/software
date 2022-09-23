@@ -28,5 +28,8 @@ node-*-linux-x64
 protoc/
 protoc-*-linux-x86_64.zip
 
+terraform
+terraform_*.zip
+
 terragrunt
 terragrunt-*
