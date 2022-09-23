@@ -2,6 +2,9 @@ VSCode-linux-x64
 VSCode-linux-x64*/
 code-*.tar.gz
 
+deno
+deno-*.zip
+
 driftctl
 driftctl-*
 
