@@ -2,6 +2,9 @@ VSCode-linux-x64
 VSCode-linux-x64*/
 code-*.tar.gz
 
+driftctl
+driftctl-*
+
 go
 go-*/
 go*.tar.gz
