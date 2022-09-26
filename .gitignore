@@ -19,5 +19,8 @@ node-linux-x64
 node-*-linux-x64.tar.xz
 node-*-linux-x64
 
+protoc/
+protoc-*-linux-x86_64.zip
+
 terragrunt
 terragrunt-*
