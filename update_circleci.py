@@ -47,7 +47,6 @@ def save_member(archive, root, member, replace_prefix):
             path.mkdir(parents=True)
 
     elif member.isfile():
-        breakpoint()
         content = archive.extractfile(member)
 
         # Set file content
@@ -83,7 +82,6 @@ def main():
     member = archive.getmember(str(member_path))
     save_member(archive, unpacked_root, member, TAR_PREFIX.format(version=version))
 
-    breakpoint()
     symlink = Path(SYMLINK_PATH).expanduser()
     if symlink.exists():
         symlink.unlink()
