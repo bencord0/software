@@ -8,42 +8,10 @@ from pathlib import Path
 from tqdm import tqdm
 from urllib.parse import urlparse
 
+from semver import SemVer
+
 INDEX_URL = 'https://api.github.com/repos/protocolbuffers/protobuf/releases'
 FETCH_URL = 'https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_64.zip'
-
-
-class SemVer():
-    def __init__(self, version):
-        try:
-            major, minor, patch = version.split('.', 3)
-        except ValueError:
-            major, minor = version.split('.', 2)
-            patch = 0
-
-        self._hash = hash(version)
-        self._major = int(major.removeprefix('v'))
-        self._minor = int(minor)
-        self._patch = int(patch)
-
-    def __hash__(self):
-        return self._hash
-
-    def __eq__(self, other):
-        return (
-            self._major == other._major
-            and self._minor == other._minor
-            and self._patch == other._patch
-        )
-
-    def __gt__(self, other):
-        if self.__eq__(other):
-            return False
-
-        return (
-            self._major >= other._major
-            and self._minor >= other._minor
-            and self._patch >= other._patch
-        )
 
 
 def latest_version():

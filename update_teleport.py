@@ -103,12 +103,11 @@ def main():
     archive = tarfile.open(saved_tarball)
     unpacked_root = Path(UNPACKED_ROOT.format(version=version)).expanduser()
 
-    for member in archive:
-        save_member(archive, unpacked_root, member, SOFTWARE_PREFIX)
-    breakpoint()
+    if not unpacked_root.exists():
+        for member in archive:
+            save_member(archive, unpacked_root, member, SOFTWARE_PREFIX)
 
     symlink = Path(SYMLINK_PATH).expanduser()
-    breakpoint()
     if symlink.exists():
         symlink.unlink()
     symlink.symlink_to(unpacked_root)
