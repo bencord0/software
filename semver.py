@@ -5,7 +5,11 @@ class SemVer():
         self._hash = hash(version)
         self._major = int(major.removeprefix('v'))
         self._minor = int(minor)
-        self._patch = int(patch)
+        try:
+            self._patch = int(patch)
+        except ValueError as e:
+            patch, extra = patch.split('-', 1)
+            self._patch = int(patch)
 
     def __hash__(self):
         return self._hash
