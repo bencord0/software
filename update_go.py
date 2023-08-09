@@ -14,12 +14,7 @@ FETCH_URL = 'https://go.dev/dl/go{version}.linux-amd64.tar.gz'
 
 def latest_version():
     index = requests.get(INDEX_URL).json()
-
     latest_version = index[0]['version']
-
-    # quirk for major releases
-    if latest_version.endswith('.0'):
-        latest_version = latest_version[:-2]
 
     return latest_version
 
@@ -44,12 +39,14 @@ def save_member(archive, root, member, replace_prefix):
 
     if member.isdir():
         if not path.exists():
-            path.mkdir()
+            path.mkdir(parents=True)
 
     elif member.isfile():
         content = archive.extractfile(member)
 
         # Set file content
+        if not path.parent.exists():
+            path.parent.mkdir(parents=True)
         buf = content.read()
         path.write_bytes(buf)
 
