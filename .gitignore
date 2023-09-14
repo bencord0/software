@@ -1,6 +1,14 @@
+__pycache__
+
+argocd
+argocd-v*
+
+circleci-cli
+circleci-cli_*
+
+code-*.tar.gz
 VSCode-linux-x64
 VSCode-linux-x64*/
-code-*.tar.gz
 
 deno
 deno-*.zip
@@ -28,8 +36,14 @@ node-*-linux-x64
 protoc/
 protoc-*-linux-x86_64.zip
 
+teleport
+teleport-v*
+
 terraform
+terraform-*
 terraform_*.zip
 
 terragrunt
 terragrunt-*
+
+zoom_amd64-*
