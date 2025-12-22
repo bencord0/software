@@ -9,6 +9,7 @@ from tqdm import tqdm
 from urllib.parse import urlparse
 
 from semver import SemVer
+from software_updater import save_and_symlink
 
 REPO_SLUG = 'gravitational/teleport'
 SOFTWARE_PREFIX = 'teleport'
@@ -21,6 +22,7 @@ SAVED_TARBALL = f'~/Software/{SOFTWARE_PREFIX_SEPARATOR}{{version}}{SOFTWARE_SUF
 UNPACKED_ROOT = f'~/Software/{SOFTWARE_PREFIX_SEPARATOR}{{version}}'
 TAR_PREFIX = f'{SOFTWARE_PREFIX_SEPARATOR}{{version}}{SOFTWARE_SUFFIX_TAR}'
 SYMLINK_PATH = f'~/Software/{SOFTWARE_PREFIX}'
+PREFIX = 'teleport'
 
 
 def latest_version():
@@ -48,69 +50,10 @@ def latest_version():
     return latest_version[1]['tag_name']
 
 
-def save_tarball(url, path):
-    with path.open('wb') as tarball:
-        print(f'Downloading: {url}')
-        download = requests.get(url, stream=True)
-        content_length = int(download.headers['content-length'])
-
-        with tqdm(total=content_length) as progress:
-            for chunk in download.iter_content(chunk_size=4096):
-                progress.update(len(chunk))
-                tarball.write(chunk)
-
-
-def save_member(archive, root, member, replace_prefix):
-    path = Path(
-        member.name.replace(replace_prefix, str(root), 1)
-    )
-    print(f'{str(path)}')
-
-    if member.isdir():
-        if not path.exists():
-            path.mkdir(parents=True)
-
-    elif member.isfile():
-        content = archive.extractfile(member)
-
-        # Set file content
-        buf = content.read()
-        if not path.parent.exists():
-            path.parent.mkdir()
-        path.write_bytes(buf)
-
-        # Set file attributes
-        path.chmod(member.mode)
-
-        # Set file timestamps
-        os.utime(path, (member.mtime, member.mtime))
-
-    elif member.issym():
-        path.symlinik_to(member.linkname)
-
-    else:
-        print(f'{member.name}: Unknown member type')
-        breakpoint()
-
 def main():
     version = latest_version()
-    fetch_url = FETCH_URL.format(version=version)
+    save_and_symlink(FETCH_URL, SAVED_TARBALL, UNPACKED_ROOT, SYMLINK_PATH, version, PREFIX)
 
-    saved_tarball = Path(SAVED_TARBALL.format(version=version)).expanduser()
-    if not saved_tarball.exists():
-        save_tarball(fetch_url, saved_tarball)
-
-    archive = tarfile.open(saved_tarball)
-    unpacked_root = Path(UNPACKED_ROOT.format(version=version)).expanduser()
-
-    if not unpacked_root.exists():
-        for member in archive:
-            save_member(archive, unpacked_root, member, SOFTWARE_PREFIX)
-
-    symlink = Path(SYMLINK_PATH).expanduser()
-    if symlink.exists():
-        symlink.unlink()
-    symlink.symlink_to(unpacked_root)
 
 if __name__ == '__main__':
     main()

@@ -9,6 +9,7 @@ from tqdm import tqdm
 from urllib.parse import urlparse
 
 from semver import SemVer
+from software_updater import save_zipball
 
 INDEX_URL = 'https://api.github.com/repos/denoland/deno/releases'
 FETCH_URL = 'https://github.com/denoland/deno/releases/download/{version}/deno-x86_64-unknown-linux-gnu.zip'
@@ -36,18 +37,6 @@ def latest_version():
         raise RuntimeError("Couldn't find latest lts version")
 
     return latest_version[1]['name']
-
-
-def save_zipball(url, path):
-    with path.open('wb') as tarball:
-        print(f'Downloading: {url}')
-        download = requests.get(url, stream=True)
-        content_length = int(download.headers['content-length'])
-
-        with tqdm(total=content_length) as progress:
-            for chunk in download.iter_content(chunk_size=4096):
-                progress.update(len(chunk))
-                tarball.write(chunk)
 
 
 def main():

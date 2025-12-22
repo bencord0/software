@@ -9,6 +9,7 @@ from tqdm import tqdm
 from urllib.parse import urlparse
 
 from semver import SemVer
+from software_updater import save_tarball
 
 INDEX_URL = 'https://api.github.com/repos/helm/helm/releases'
 FETCH_URL = 'https://get.helm.sh/helm-{version}-linux-amd64.tar.gz'
@@ -36,17 +37,6 @@ def latest_version():
         raise RuntimeError("Couldn't find latest lts version")
 
     return latest_version[1]['tag_name']
-
-
-def save_tarball(url, path):
-    with path.open('wb') as tarball:
-        print(f'Downloading: {url}')
-        download = requests.get(url, stream=True)
-
-        with tqdm() as progress:
-            for chunk in download.iter_content(chunk_size=4096):
-                progress.update(len(chunk))
-                tarball.write(chunk)
 
 
 def main():

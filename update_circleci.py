@@ -7,6 +7,7 @@ import tarfile
 from pathlib import Path
 from tqdm import tqdm
 from urllib.parse import urlparse
+from software_updater import save_tarball
 
 INDEX_URL = 'https://api.github.com/repos/circleci-public/circleci-cli/releases'
 FETCH_URL = 'https://github.com/circleci-public/circleci-cli/releases/download/v{version}/circleci-cli_{version}_linux_amd64.tar.gz'
@@ -22,18 +23,6 @@ def latest_version():
     latest_version = index[0]['name']
 
     return latest_version[1:]
-
-
-def save_tarball(url, path):
-    with path.open('wb') as tarball:
-        print(f'Downloading: {url}')
-        download = requests.get(url, stream=True)
-        content_length = int(download.headers['content-length'])
-
-        with tqdm(total=content_length) as progress:
-            for chunk in download.iter_content(chunk_size=4096):
-                progress.update(len(chunk))
-                tarball.write(chunk)
 
 
 def save_member(archive, root, member, replace_prefix):

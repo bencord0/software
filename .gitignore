@@ -6,6 +6,11 @@ Antigravity-*
 argocd
 argocd-v*
 
+bazel-*
+
+bun
+bun-*
+
 circleci-cli
 circleci-cli_*
 
@@ -13,11 +18,15 @@ code-*.tar.gz
 VSCode-linux-x64
 VSCode-linux-x64*/
 
+cursor
+
 deno
 deno-*.zip
 
 driftctl
 driftctl-*
+
+FreeCAD
 
 go
 go-*/
@@ -25,6 +34,8 @@ go*.tar.gz
 
 gomplate
 gomplate-*
+
+google-chrome
 
 helm
 helm-*.tar
@@ -35,6 +46,9 @@ kubernetes
 node-linux-x64
 node-*-linux-x64.tar.xz
 node-*-linux-x64
+
+opentofu
+opentofu_*
 
 protoc/
 protoc-*-linux-x86_64.zip
@@ -48,5 +62,7 @@ terraform_*.zip
 
 terragrunt
 terragrunt-*
+
+tor-browser
 
 zoom_amd64-*

@@ -11,12 +11,13 @@ from bs4 import BeautifulSoup
 from selenium.webdriver import Firefox, FirefoxOptions
 from pathlib import Path
 
-from software_updater import save_tarball, unpack_tarball
+from software_updater import save_and_symlink
 
 INDEX_URL = 'https://antigravity.google/download/linux'
 SAVED_TARBALL = '~/Software/Antigravity-{version}.tar.gz'
 UNPACKED_ROOT = '~/Software/Antigravity-{version}'
 SYMLINK_PATH = '~/Software/Antigravity'
+PREFIX = 'Antigravity'
 
 VersionMatch = re.compile(r'.*/stable/(?P<version>.+)/linux-x64/Antigravity.tar.gz$')
 
@@ -49,17 +50,7 @@ def find_latest():
 
 def main():
     url, version = find_latest()
-    saved_tarball = Path(SAVED_TARBALL.format(version=version)).expanduser()
-    if not saved_tarball.exists():
-        save_tarball(url, saved_tarball)
-
-    unpacked_root = Path(UNPACKED_ROOT.format(version=version)).expanduser()
-    unpack_tarball(saved_tarball, unpacked_root, prefix='Antigravity')
-
-    symlink = Path(SYMLINK_PATH).expanduser()
-    if symlink.exists():
-        symlink.unlink()
-    symlink.symlink_to(unpacked_root)
+    save_and_symlink(url, SAVED_TARBALL, UNPACKED_ROOT, SYMLINK_PATH, version, PREFIX)
 
 if __name__ == '__main__':
     main()
