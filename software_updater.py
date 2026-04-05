@@ -25,9 +25,10 @@ def save_zipball(url: str, path: Path):
 def unpack_tarball(tarball: Path, root: Path, prefix: str):
     archive = tarfile.open(tarball)
     for member in archive:
-        path = Path(member.name)
         if prefix:
             path = root / member.name.removeprefix(prefix).removeprefix('/')
+        else:
+            path = root / member.name
         print(f'{str(path)}')
 
         if member.isdir():

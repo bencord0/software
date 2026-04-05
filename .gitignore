@@ -11,6 +11,9 @@ bazel-*
 bun
 bun-*
 
+calibre
+calibre-*
+
 circleci-cli
 circleci-cli_*
 
